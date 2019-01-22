@@ -6,7 +6,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+const path = require('path');
 //var mongo = require('mongodb').MongoClient;
 //var url = 'mongodb://127.0.0.1:27017/';
 
@@ -46,6 +46,14 @@ app.use(function (req, res, next) {
 
 // development error handler
 // will print stacktrace
+if(process.env.NODE_ENV ==='production')
+{
+    app.use(express.static('client/build'));
+
+    app.get('*',(req,res) =>{
+res.sendFile(path.resolve(__dirname,'client','build','index.html'))
+    })
+}
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
         res.status(err.status || 500);
